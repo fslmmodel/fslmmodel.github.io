@@ -483,7 +483,8 @@
       <div class='notation'>
         <strong>Notation.</strong> <code>FSLM A &rarr; B</code> means <strong>A&nbsp;Hz input</strong>
         and <strong>B&nbsp;Hz output</strong> frame rates. For example, <code>FSLM 6.25 &rarr; 12.5</code>
-        accepts speech encoded at 6.25&nbsp;Hz and emits speech tokens at 12.5&nbsp;Hz.
+        accepts speech encoded at 6.25&nbsp;Hz and emits speech tokens at 12.5&nbsp;Hz. 
+        For each FSLM configuration we greedy sampling, so you might see the text output being the same across different configs.
       </div>
 
       <div class='filter-wrap'>
