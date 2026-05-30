@@ -3,7 +3,7 @@
 <head>
   <meta charset='utf-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <title>FlexiSLM Demo</title>
+  <title>FSLM Demo</title>
   <script src='./template.v2.js'></script>
   <style>
     :root {
@@ -168,7 +168,7 @@
       font-style: italic;
     }
 
-    /* Notation legend (for FlexiSLM A->B) */
+    /* Notation legend (for FSLM A->B) */
     .notation {
       margin: 0 0 18px;
       padding: 10px 14px;
@@ -411,13 +411,13 @@
     <div class='top-nav-inner'>
       <a href='#abstract'>Abstract &amp; Architecture</a>
       <a href='#comparison'>Baseline Comparison</a>
-      <a href='#flexislm-data'>FlexiSLM-Data</a>
+      <a href='#flexislm-data'>FSLM-Data</a>
     </div>
   </nav>
 
   <header class='hero'>
     <div class='hero-inner'>
-      <h1>FlexiSLM: A Dynamic and Controllable Frame Rate Spoken Language Model</h1>
+      <h1>FSLM: A Dynamic and Controllable Frame Rate Spoken Language Model</h1>
       <p class='hero-subtitle'>
         Paper submission to EMNLP
       </p>
@@ -428,12 +428,12 @@
 
     <!-- ===== Block 1: Intro + contributions + architecture image ===== -->
     <section class='section' id='abstract'>
-      <h2>FlexiSLM &mdash; Overview</h2>
+      <h2>FSLM &mdash; Overview</h2>
       <p>
         Existing spoken language models (SLMs) typically use a fixed speech-token frame
         rate (for example, 25 Hz or 12.5 Hz). This fixed-rate design cannot adapt to
         time-varying speech complexity and does not offer a direct speed-quality trade-off
-        at inference time. We introduce <strong>FlexiSLM</strong>, the first SLM that
+        at inference time. We introduce <strong>FSLM</strong>, the first SLM that
         supports <em>dynamic</em> and <em>controllable</em> frame rates on both speech
         input and output. A single trained model can be steered from 12.5 Hz down to 4.0
         Hz without retraining.
@@ -443,7 +443,7 @@
       <ul class='contrib-list'>
         <li>
           <strong>Dynamic frame rate SLM framework and validation.</strong> We introduce
-          FlexiSLM, the first dynamic frame rate SLM framework, with dynamic frame
+          FSLM, the first dynamic frame rate SLM framework, with dynamic frame
           compression on both speech input and output. Experiments show strong performance
           at 12.5 Hz and 6.25 Hz, with graceful degradation at 5.0 Hz and 4.0 Hz. We plan
           to release the code and model to support future research.
@@ -451,11 +451,11 @@
         <li>
           <strong>Accurate and practical frame rate control.</strong> We propose direct
           frame rate conditioning, letting users specify the average output frame rate
-          instead of indirectly tuning a merging threshold. This makes FlexiSLM, to our
+          instead of indirectly tuning a merging threshold. This makes FSLM, to our
           knowledge, the first SLM with frame rate controllability.
         </li>
         <li>
-          <strong>Strong quality-efficiency trade-off.</strong> At 6.25 Hz output, FlexiSLM
+          <strong>Strong quality-efficiency trade-off.</strong> At 6.25 Hz output, FSLM
           roughly <em>halves</em> AR inference time relative to 12.5 Hz with only minor
           quality degradation; at high-quality operating points, it outperforms fixed-rate
           7B baselines such as Qwen2.5-Omni and Kimi-Audio.
@@ -463,9 +463,9 @@
       </ul>
 
       <figure class='arch-figure'>
-        <img src='assets/flexislm_architecture.png' alt='FlexiSLM architecture'>
+        <img src='assets/flexislm_architecture.png' alt='FSLM architecture'>
         <figcaption>
-          Overall FlexiSLM architecture: a Thinker-Talker model with dynamic frame-rate
+          Overall FSLM architecture: a Thinker-Talker model with dynamic frame-rate
           compression on speech input and controllable frame-rate generation on speech
           output.
         </figcaption>
@@ -481,8 +481,8 @@
       </p>
 
       <div class='notation'>
-        <strong>Notation.</strong> <code>FlexiSLM A &rarr; B</code> means <strong>A&nbsp;Hz input</strong>
-        and <strong>B&nbsp;Hz output</strong> frame rates. For example, <code>FlexiSLM 6.25 &rarr; 12.5</code>
+        <strong>Notation.</strong> <code>FSLM A &rarr; B</code> means <strong>A&nbsp;Hz input</strong>
+        and <strong>B&nbsp;Hz output</strong> frame rates. For example, <code>FSLM 6.25 &rarr; 12.5</code>
         accepts speech encoded at 6.25&nbsp;Hz and emits speech tokens at 12.5&nbsp;Hz.
       </div>
 
@@ -500,12 +500,12 @@
       <div class='error-box' id='load-error' style='display:none; margin-top: 16px;'></div>
     </section>
 
-    <!-- ===== Block 3: FlexiSLM-Data ===== -->
+    <!-- ===== Block 3: FSLM-Data ===== -->
     <section class='section' id='flexislm-data'>
-      <h2>FlexiSLM-Data Showcase</h2>
+      <h2>FSLM-Data Showcase</h2>
       <p class='section-subtitle'>
-        FlexiSLM-Data is our large-scale speech-to-speech dialogue corpus used to train
-        FlexiSLM. This section presents curated user-assistant speech pairs to give an
+        FSLM-Data is our large-scale speech-to-speech dialogue corpus used to train
+        FSLM. This section presents curated user-assistant speech pairs to give an
         intuitive view of the data style and interaction quality. Each card shows the
         user's spoken prompt and the assistant's spoken response, together with transcript
         text and rough duration / audio-token statistics from the manifest.
@@ -519,19 +519,19 @@
   <script>
     // ==== Model registry =====================================================
     const MODEL_META = {
-      flexi_12p5_12p5: { label: 'FlexiSLM 12.5 \u2192 12.5', kind: 'flexi' },
-      flexi_12p5_6p25: { label: 'FlexiSLM 12.5 \u2192 6.25', kind: 'flexi' },
-      flexi_6p25_12p5: { label: 'FlexiSLM 6.25 \u2192 12.5', kind: 'flexi' },
-      flexi_6p25_6p25: { label: 'FlexiSLM 6.25 \u2192 6.25', kind: 'flexi' },
-      flexi_5p0_5p0:   { label: 'FlexiSLM 5.0 \u2192 5.0',   kind: 'flexi' },
-      flexi_4p0_4p0:   { label: 'FlexiSLM 4.0 \u2192 4.0',   kind: 'flexi' },
+      flexi_12p5_12p5: { label: 'FSLM 12.5 \u2192 12.5', kind: 'flexi' },
+      flexi_12p5_6p25: { label: 'FSLM 12.5 \u2192 6.25', kind: 'flexi' },
+      flexi_6p25_12p5: { label: 'FSLM 6.25 \u2192 12.5', kind: 'flexi' },
+      flexi_6p25_6p25: { label: 'FSLM 6.25 \u2192 6.25', kind: 'flexi' },
+      flexi_5p0_5p0:   { label: 'FSLM 5.0 \u2192 5.0',   kind: 'flexi' },
+      flexi_4p0_4p0:   { label: 'FSLM 4.0 \u2192 4.0',   kind: 'flexi' },
       qwen25_omni:     { label: 'Qwen2.5-Omni',              kind: 'baseline' },
       qwen3_omni:      { label: 'Qwen3-Omni-30B',            kind: 'baseline' },
       mimo_audio_7b:   { label: 'MiMo-Audio-7B',             kind: 'baseline' },
       kimi_audio:      { label: 'Kimi-Audio-7B',             kind: 'baseline' }
     };
 
-    // Display order: all FlexiSLM configurations first, then baselines.
+    // Display order: all FSLM configurations first, then baselines.
     const MODEL_ORDER = [
       'flexi_12p5_12p5',
       'flexi_12p5_6p25',
@@ -863,7 +863,7 @@
       }
     }
 
-    // ==== FlexiSLM-Data block ===============================================
+    // ==== FSLM-Data block ===============================================
     function fdShowError(msg) {
       const box = document.getElementById('flexislm-data-error');
       if (!box) return;
@@ -926,7 +926,7 @@
         const manifest = await r.json();
         const samples = Array.isArray(manifest.samples) ? manifest.samples : [];
         if (!samples.length) {
-          list.innerHTML = '<div class="placeholder-card"><strong>No FlexiSLM-Data samples found.</strong></div>';
+          list.innerHTML = '<div class="placeholder-card"><strong>No FSLM-Data samples found.</strong></div>';
           return;
         }
         list.innerHTML = samples.map(function(s, i) { return fdSampleCardHtml(s, i); }).join('');
