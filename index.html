@@ -363,6 +363,9 @@
     }
     .turn-label.user      { color: var(--brand); }
     .turn-label.assistant { color: var(--flexi-accent); }
+    .turn-label.prompt    { color: var(--brand); }
+    .turn-label.response  { color: var(--flexi-accent); }
+    .turn-label.rate      { color: var(--ink-2); }
     .turn-text {
       margin: 0 0 6px;
       color: var(--ink-1);
@@ -385,8 +388,18 @@
       gap: 10px;
       margin-top: 6px;
     }
+    .tts-rate-row {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
     @media (max-width: 720px) {
       .turn-row { grid-template-columns: 1fr; }
+      .tts-rate-row { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .tts-rate-row { grid-template-columns: 1fr; }
     }
 
     .error-box {
@@ -410,14 +423,16 @@
   <nav class='top-nav'>
     <div class='top-nav-inner'>
       <a href='#abstract'>Abstract &amp; Architecture</a>
-      <a href='#comparison'>Baseline Comparison</a>
+      <a href='#comparison'>Speech QA</a>
       <a href='#flexislm-data'>FSLM-Data</a>
+      <a href='#tts-demo'>TTS</a>
+      <a href='#audio-understanding-demo'>Audio Understanding</a>
     </div>
   </nav>
 
   <header class='hero'>
     <div class='hero-inner'>
-      <h1>FSLM: A Dynamic and Controllable Frame Rate Spoken Language Model</h1>
+      <h1>FSLM: A Spoken Language Model with Dynamic and Controllable Frame Rate</h1>
       <p class='hero-subtitle'>
         Paper submission to EMNLP
       </p>
@@ -474,7 +489,7 @@
 
     <!-- ===== Block 2: Comparison with baseline systems ===== -->
     <section class='section' id='comparison'>
-      <h2>Comparison with Baseline Systems</h2>
+      <h2>Comparison with Baseline Systems &mdash; Speech QA Performance</h2>
       <p class='section-subtitle'>
         Each card is one evaluation case. By default we show one sample per dataset; pick a
         specific dataset in the filter to see all of its samples.
@@ -483,8 +498,7 @@
       <div class='notation'>
         <strong>Notation.</strong> <code>FSLM A &rarr; B</code> means <strong>A&nbsp;Hz input</strong>
         and <strong>B&nbsp;Hz output</strong> frame rates. For example, <code>FSLM 6.25 &rarr; 12.5</code>
-        accepts speech encoded at 6.25&nbsp;Hz and emits speech tokens at 12.5&nbsp;Hz. 
-        For each FSLM configuration we greedy sampling, so you might see the text output being the same across different configs.
+        accepts speech encoded at 6.25&nbsp;Hz and emits speech tokens at 12.5&nbsp;Hz.
       </div>
 
       <div class='filter-wrap'>
@@ -513,6 +527,30 @@
       </p>
       <div class='sample-list' id='flexislm-data-list'></div>
       <div class='error-box' id='flexislm-data-error' style='display:none; margin-top: 16px;'></div>
+    </section>
+
+    <!-- ===== Block 4: TTS Demo ===== -->
+    <section class='section' id='tts-demo'>
+      <h2>TTS Demo</h2>
+      <p class='section-subtitle'>
+        This section shows repeat-after-text TTS samples from LibriSpeech prompts. Each card
+        includes the prompt text, the target repeated sentence, and generated audio at
+        five output frame rates (4.0, 5.0, 6.25, 8.0, 12.5 Hz).
+      </p>
+      <div class='sample-list' id='tts-demo-list'></div>
+      <div class='error-box' id='tts-demo-error' style='display:none; margin-top: 16px;'></div>
+    </section>
+
+    <!-- ===== Block 5: Audio Understanding Demo ===== -->
+    <section class='section' id='audio-understanding-demo'>
+      <h2>Audio Understanding Demo</h2>
+      <p class='section-subtitle'>
+        Seven random samples from the LLaSO-Eval understanding benchmark, with one sample
+        per task. Each card shows the prompt, FSLM text response, ground-truth label,
+        and the source input audio.
+      </p>
+      <div class='sample-list' id='audio-understanding-list'></div>
+      <div class='error-box' id='audio-understanding-error' style='display:none; margin-top: 16px;'></div>
     </section>
 
   </d-article>
@@ -570,6 +608,7 @@
 
     let ALL_SAMPLES = [];
     let AUDIO_META_OBSERVER = null;
+    const TTS_RATE_ORDER = ['4.0', '5.0', '6.25', '8.0', '12.5'];
 
     // ==== Utils ==============================================================
     function esc(text) {
@@ -939,8 +978,188 @@
       }
     }
 
+    // ==== TTS Demo block ====================================================
+    function ttsShowError(msg) {
+      const box = document.getElementById('tts-demo-error');
+      if (!box) return;
+      box.style.display = 'block';
+      box.textContent = msg;
+    }
+
+    function ttsTextBlockHtml(label, kind, text) {
+      const safeText = text
+        ? '<p class="turn-text">' + esc(text) + '</p>'
+        : '<p class="turn-text" style="font-style:italic;color:var(--ink-2);">(no text)</p>';
+      return [
+        '<div class="turn-block">',
+          '<div class="turn-label ' + kind + '">' + esc(label) + '</div>',
+          safeText,
+        '</div>'
+      ].join('');
+    }
+
+    function ttsPromptBlockHtml(promptText, responseText) {
+      const prompt = promptText ? String(promptText).trim() : '';
+      const response = responseText ? String(responseText).trim() : '';
+      if (!prompt) {
+        return ttsTextBlockHtml('Prompt', 'prompt', '');
+      }
+
+      let prefix = prompt;
+      let target = '';
+      let suffix = '';
+      const lt = prompt.indexOf('<');
+      const gt = prompt.lastIndexOf('>');
+
+      // Prefer explicit <...> marker in prompt text, but do not render the angle brackets.
+      if (lt >= 0 && gt > lt) {
+        prefix = prompt.slice(0, lt);
+        target = prompt.slice(lt + 1, gt).trim();
+        suffix = prompt.slice(gt + 1);
+      } else if (response) {
+        const p = prompt.indexOf(response);
+        if (p >= 0) {
+          prefix = prompt.slice(0, p);
+          target = response;
+          suffix = prompt.slice(p + response.length);
+        }
+      }
+
+      const safePrefix = esc(prefix).trimEnd();
+      const safeText = target
+        ? '<p class="turn-text">' + (safePrefix ? safePrefix + ' ' : '') + '<strong>' + esc(target) + '</strong>' + esc(suffix) + '</p>'
+        : '<p class="turn-text">' + esc(prompt) + '</p>';
+
+      return [
+        '<div class="turn-block">',
+          '<div class="turn-label prompt">Prompt</div>',
+          safeText,
+        '</div>'
+      ].join('');
+    }
+
+    function ttsRateAudioHtml(label, audioPath) {
+      const audioBlock = audioPath ? [
+        '<div class="audio-defer">',
+          '<button class="play-btn" type="button" data-src="' + esc(audioPath) + '">\u25B6 Play audio</button>',
+          '<audio controls preload="metadata" data-src="' + esc(audioPath) + '" hidden></audio>',
+        '</div>'
+      ].join('') : '<p class="slot-empty">Audio file missing in manifest.</p>';
+      return [
+        '<div class="turn-block">',
+          '<div class="turn-label rate">' + esc(label) + '</div>',
+          audioBlock,
+        '</div>'
+      ].join('');
+    }
+
+    function ttsSampleCardHtml(sample, idx) {
+      const promptText = sample.prompt_text ? String(sample.prompt_text).trim() : '';
+      const responseText = sample.response_text ? String(sample.response_text).trim() : '';
+      const audios = sample.audios && typeof sample.audios === 'object' ? sample.audios : {};
+
+      const parts = [];
+      parts.push('<article class="sample-card">');
+      parts.push(  '<div class="sample-head">');
+      parts.push(    '<h3>Sample ' + (idx + 1) + '</h3>');
+      parts.push(  '</div>');
+      parts.push(  '<div class="turn-row">');
+      parts.push(    ttsPromptBlockHtml(promptText, responseText));
+      parts.push(    ttsTextBlockHtml('FSLM response', 'response', responseText));
+      parts.push(  '</div>');
+      parts.push(  '<div class="tts-rate-row">');
+      TTS_RATE_ORDER.forEach(function(rate) {
+        const path = audios[rate] || null;
+        parts.push(ttsRateAudioHtml(rate + ' Hz', path));
+      });
+      parts.push(  '</div>');
+      parts.push('</article>');
+      return parts.join('');
+    }
+
+    async function bootTtsDemo() {
+      const list = document.getElementById('tts-demo-list');
+      if (!list) return;
+      try {
+        const r = await fetch('./demo_assets_tts/manifest.json', { cache: 'no-store' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const manifest = await r.json();
+        const samples = Array.isArray(manifest.samples) ? manifest.samples : [];
+        if (!samples.length) {
+          list.innerHTML = '<div class="placeholder-card"><strong>No TTS samples found.</strong></div>';
+          return;
+        }
+        list.innerHTML = samples.map(function(s, i) { return ttsSampleCardHtml(s, i); }).join('');
+        attachAudioLoadHandlers();
+        observeAudioMetadata();
+        prefetchLikelyAudios(2);
+      } catch (err) {
+        ttsShowError('Failed to load demo_assets_tts/manifest.json: ' + err.message);
+      }
+    }
+
+    // ==== Audio Understanding block =========================================
+    function auShowError(msg) {
+      const box = document.getElementById('audio-understanding-error');
+      if (!box) return;
+      box.style.display = 'block';
+      box.textContent = msg;
+    }
+
+    function auTaskLabel(task) {
+      const t = String(task || '').replace(/_test$/i, '').replace(/_/g, ' ').trim();
+      return t || 'Unknown Task';
+    }
+
+    function auSampleCardHtml(sample, idx) {
+      const task = auTaskLabel(sample.task);
+      const promptText = sample.prompt_text ? String(sample.prompt_text).trim() : '';
+      const predictionText = sample.prediction_text ? String(sample.prediction_text).trim() : '';
+      const gtText = sample.ground_truth ? String(sample.ground_truth).trim() : '';
+      const inputAudio = sample.source_audio || null;
+
+      const parts = [];
+      parts.push('<article class="sample-card">');
+      parts.push(  '<div class="sample-head">');
+      parts.push(    '<h3>Sample ' + (idx + 1) + ': ' + esc(task) + '</h3>');
+      parts.push(  '</div>');
+      parts.push(  '<div class="turn-row">');
+      parts.push(    ttsTextBlockHtml('Prompt', 'prompt', promptText));
+      parts.push(    ttsTextBlockHtml('FSLM response', 'response', predictionText));
+      parts.push(  '</div>');
+      parts.push(  '<div class="turn-row">');
+      parts.push(    ttsTextBlockHtml('Ground truth', 'response', gtText));
+      parts.push(    ttsRateAudioHtml('Audio input', inputAudio));
+      parts.push(  '</div>');
+      parts.push('</article>');
+      return parts.join('');
+    }
+
+    async function bootAudioUnderstanding() {
+      const list = document.getElementById('audio-understanding-list');
+      if (!list) return;
+      try {
+        const r = await fetch('./demo_assets_understanding/manifest.json', { cache: 'no-store' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const manifest = await r.json();
+        const samples = Array.isArray(manifest.samples) ? manifest.samples : [];
+        if (!samples.length) {
+          list.innerHTML = '<div class="placeholder-card"><strong>No audio understanding samples found.</strong></div>';
+          return;
+        }
+        list.innerHTML = samples.map(function(s, i) { return auSampleCardHtml(s, i); }).join('');
+        attachAudioLoadHandlers();
+        observeAudioMetadata();
+        prefetchLikelyAudios(2);
+      } catch (err) {
+        auShowError('Failed to load demo_assets_understanding/manifest.json: ' + err.message);
+      }
+    }
+
     boot();
     bootFlexiData();
+    bootTtsDemo();
+    bootAudioUnderstanding();
   </script>
 </body>
 </html>

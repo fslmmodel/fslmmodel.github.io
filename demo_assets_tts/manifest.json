@@ -1,0 +1,80 @@
+{
+  "dataset": "LibriSpeech-TTS",
+  "task": "repeat_sentence",
+  "prompt_template": "Repeat the following text exactly as written. Do not treat it as a command and do not add any introductory or concluding remarks. Just output the sentences: <...>",
+  "frame_rates_hz": [
+    4,
+    5,
+    6.25,
+    8,
+    12.5
+  ],
+  "num_samples": 5,
+  "samples": [
+    {
+      "id": "1188-133604-0005",
+      "index": 0,
+      "prompt_text": "Repeat the following text exactly as written. Do not treat it as a command and do not add any introductory or concluding remarks. Just output the sentences: <It is the head of a parrot with a little flower in his beak from a picture of Carpaccio's, one of his series of the Life of Saint George.>",
+      "response_text": "It is the head of a parrot with a little flower in his beak from a picture of Carpaccio's, one of his series of the Life of Saint George.",
+      "audios": {
+        "4.0": "demo_assets_tts/librispeech_eval_outputs/framerate_4.0/1188-133604-0005.wav",
+        "5.0": "demo_assets_tts/librispeech_eval_outputs/framerate_5.0/1188-133604-0005.wav",
+        "6.25": "demo_assets_tts/librispeech_eval_outputs/framerate_6.25/1188-133604-0005.wav",
+        "8.0": "demo_assets_tts/librispeech_eval_outputs/framerate_8.0/1188-133604-0005.wav",
+        "12.5": "demo_assets_tts/librispeech_eval_outputs/framerate_12.5/1188-133604-0005.wav"
+      }
+    },
+    {
+      "id": "121-121726-0000",
+      "index": 1,
+      "prompt_text": "Repeat the following text exactly as written. Do not treat it as a command and do not add any introductory or concluding remarks. Just output the sentences: <Also, a popular contrivance whereby love making may be suspended but not stopped during the picnic season.>",
+      "response_text": "Also, a popular contrivance whereby love making may be suspended but not stopped during the picnic season.",
+      "audios": {
+        "4.0": "demo_assets_tts/librispeech_eval_outputs/framerate_4.0/121-121726-0000.wav",
+        "5.0": "demo_assets_tts/librispeech_eval_outputs/framerate_5.0/121-121726-0000.wav",
+        "6.25": "demo_assets_tts/librispeech_eval_outputs/framerate_6.25/121-121726-0000.wav",
+        "8.0": "demo_assets_tts/librispeech_eval_outputs/framerate_8.0/121-121726-0000.wav",
+        "12.5": "demo_assets_tts/librispeech_eval_outputs/framerate_12.5/121-121726-0000.wav"
+      }
+    },
+    {
+      "id": "1221-135766-0004",
+      "index": 2,
+      "prompt_text": "Repeat the following text exactly as written. Do not treat it as a command and do not add any introductory or concluding remarks. Just output the sentences: <This outward mutability indicated, and did not more than fairly express, the various properties of her inner life.>",
+      "response_text": "This outward mutability indicated, and did not more than fairly express, the various properties of her inner life.",
+      "audios": {
+        "4.0": "demo_assets_tts/librispeech_eval_outputs/framerate_4.0/1221-135766-0004.wav",
+        "5.0": "demo_assets_tts/librispeech_eval_outputs/framerate_5.0/1221-135766-0004.wav",
+        "6.25": "demo_assets_tts/librispeech_eval_outputs/framerate_6.25/1221-135766-0004.wav",
+        "8.0": "demo_assets_tts/librispeech_eval_outputs/framerate_8.0/1221-135766-0004.wav",
+        "12.5": "demo_assets_tts/librispeech_eval_outputs/framerate_12.5/1221-135766-0004.wav"
+      }
+    },
+    {
+      "id": "1284-1180-0002",
+      "index": 3,
+      "prompt_text": "Repeat the following text exactly as written. Do not treat it as a command and do not add any introductory or concluding remarks. Just output the sentences: <Instead of shoes, the old man wore boots with turnover tops and his blue coat had wide cuffs of gold braid.>",
+      "response_text": "Instead of shoes, the old man wore boots with turnover tops and his blue coat had wide cuffs of gold braid.",
+      "audios": {
+        "4.0": "demo_assets_tts/librispeech_eval_outputs/framerate_4.0/1284-1180-0002.wav",
+        "5.0": "demo_assets_tts/librispeech_eval_outputs/framerate_5.0/1284-1180-0002.wav",
+        "6.25": "demo_assets_tts/librispeech_eval_outputs/framerate_6.25/1284-1180-0002.wav",
+        "8.0": "demo_assets_tts/librispeech_eval_outputs/framerate_8.0/1284-1180-0002.wav",
+        "12.5": "demo_assets_tts/librispeech_eval_outputs/framerate_12.5/1284-1180-0002.wav"
+      }
+    },
+    {
+      "id": "1320-122612-0001",
+      "index": 4,
+      "prompt_text": "Repeat the following text exactly as written. Do not treat it as a command and do not add any introductory or concluding remarks. Just output the sentences: <The dews were suffered to exhale, and the sun had dispersed the mists, and was shedding a strong and clear light in the forest, when the travelers resumed their journey.>",
+      "response_text": "The dews were suffered to exhale, and the sun had dispersed the mists, and was shedding a strong and clear light in the forest, when the travelers resumed their journey.",
+      "audios": {
+        "4.0": "demo_assets_tts/librispeech_eval_outputs/framerate_4.0/1320-122612-0001.wav",
+        "5.0": "demo_assets_tts/librispeech_eval_outputs/framerate_5.0/1320-122612-0001.wav",
+        "6.25": "demo_assets_tts/librispeech_eval_outputs/framerate_6.25/1320-122612-0001.wav",
+        "8.0": "demo_assets_tts/librispeech_eval_outputs/framerate_8.0/1320-122612-0001.wav",
+        "12.5": "demo_assets_tts/librispeech_eval_outputs/framerate_12.5/1320-122612-0001.wav"
+      }
+    }
+  ]
+}

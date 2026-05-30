@@ -1,0 +1,77 @@
+{
+  "dataset": "Audio Understanding",
+  "source": "7b_stage3_lr2e5_r32a64_pad_merging_transformer_llmbackbone_moreasr_understanding_202605_llaso-eval.jsonl",
+  "num_samples": 7,
+  "samples": [
+    {
+      "id": "understanding__00",
+      "index": 0,
+      "task": "accentdb_AI_classification_test",
+      "prompt_text": "Which of the following accents best matches the speaker’s voice in this clip? Provide only the label: American, Australian, Bangla, British, Indian, Malayalam, Odiya, Telugu, Welsh.",
+      "ground_truth": "British",
+      "prediction_text": "Australian",
+      "source_audio": "demo_assets_understanding/audio/sample_00__accentdb_AI_classification_test.wav",
+      "source_audio_original_path": "/mnt/bn/lijiaqi/LLaSO-Eval/accentdb_extended/data/british/speaker_02/british_s02_118.wav"
+    },
+    {
+      "id": "understanding__01",
+      "index": 1,
+      "task": "vctk_gender_classification_test",
+      "prompt_text": "Can you tell the gender of the speaker in this audio? It might be only return Male or Female.",
+      "ground_truth": "Female.",
+      "prediction_text": "Female.",
+      "source_audio": "demo_assets_understanding/audio/sample_01__vctk_gender_classification_test.flac",
+      "source_audio_original_path": "/mnt/bn/lijiaqi/LLaSO-Eval/vctk/wav48_silence_trimmed/p340/p340_347_mic2.flac"
+    },
+    {
+      "id": "understanding__02",
+      "index": 2,
+      "task": "vocalsound_vocal_classification_test",
+      "prompt_text": "Identify the vocal sound in this audio. Respond with only one of the following: Laughter, Sigh, Cough, Throat clearing, Sneeze, Sniff. No analysis.",
+      "ground_truth": "Cough.",
+      "prediction_text": "Cough.",
+      "source_audio": "demo_assets_understanding/audio/sample_02__vocalsound_vocal_classification_test.wav",
+      "source_audio_original_path": "/mnt/bn/lijiaqi/LLaSO-Eval/vocalclassification/dataset/f3027_0_cough.wav"
+    },
+    {
+      "id": "understanding__03",
+      "index": 3,
+      "task": "meld_ER_classification_test",
+      "prompt_text": "Classify the emotional tone in the provided audio. The possible emotions are: neutrality, joy, surprise, sadness, anger, fear, or disgust. Output only the emotion.",
+      "ground_truth": "Joy.",
+      "prediction_text": "Anger.",
+      "source_audio": "demo_assets_understanding/audio/sample_03__meld_ER_classification_test.wav",
+      "source_audio_original_path": "/mnt/bn/lijiaqi/LLaSO-Eval/Meld/MELD.Raw/wav/train/dia55_utt11.wav"
+    },
+    {
+      "id": "understanding__04",
+      "index": 4,
+      "task": "vctk_accent_classification_test",
+      "prompt_text": "Based on the audio, what accent is being used? Pick only return from: Scottish, British, Northern Irish, Irish, Indian, American, Canadian, South African, Australian, New Zealand.",
+      "ground_truth": "Northern Irish.",
+      "prediction_text": "Northern Irish.",
+      "source_audio": "demo_assets_understanding/audio/sample_04__vctk_accent_classification_test.flac",
+      "source_audio_original_path": "/mnt/bn/lijiaqi/LLaSO-Eval/vctk/wav48_silence_trimmed/p261/p261_438_mic1.flac"
+    },
+    {
+      "id": "understanding__05",
+      "index": 5,
+      "task": "vctk_age_classification_test",
+      "prompt_text": "Can you tell the age group of the speaker in this audio? It might be only return 15-19, 20-24, 25-29, or 30+.",
+      "ground_truth": "20-24.",
+      "prediction_text": "20-24.",
+      "source_audio": "demo_assets_understanding/audio/sample_05__vctk_age_classification_test.flac",
+      "source_audio_original_path": "/mnt/bn/lijiaqi/LLaSO-Eval/vctk/wav48_silence_trimmed/p275/p275_144_mic1.flac"
+    },
+    {
+      "id": "understanding__06",
+      "index": 6,
+      "task": "CREMAD_ER_classification_test",
+      "prompt_text": "What emotional tone is conveyed in this speech? Respond with one of: anger, disgust, fear, happiness, neutrality, or sadness.",
+      "ground_truth": "Fear.",
+      "prediction_text": "Fear.",
+      "source_audio": "demo_assets_understanding/audio/sample_06__CREMAD_ER_classification_test.wav",
+      "source_audio_original_path": "/mnt/bn/lijiaqi/LLaSO-Eval/CremaD/Audio/1019_IEO_FEA_HI.wav"
+    }
+  ]
+}
