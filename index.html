@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>FlexiSLM Demo</title>
+  <script src='./template.v2.js'></script>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --paper: #fafafa;
+      --ink-0: #1c1c1c;
+      --ink-1: #333333;
+      --ink-2: #666666;
+      --line: #d8d8d8;
+      --line-strong: #b8b8b8;
+      --brand: #1f3a68;
+      --brand-2: #29508c;
+      --flexi-accent: #2e7d44;
+      --baseline-accent: #8c6c1a;
+      --error-bg: #fdf3f3;
+      --error-border: #c97070;
+      --error-fg: #802727;
+      --max-w: 1200px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #15181c;
+        --paper: #1d2127;
+        --ink-0: #e6e8eb;
+        --ink-1: #c5c9cf;
+        --ink-2: #8a929c;
+        --line: #2a2f36;
+        --line-strong: #3a414a;
+        --brand: #6ea3d8;
+        --brand-2: #8fbbe6;
+        --flexi-accent: #67c187;
+        --baseline-accent: #d4b46a;
+        --error-bg: #2a1818;
+        --error-border: #8a3a3a;
+        --error-fg: #f1b3b3;
+      }
+      .arch-figure img { background: #ffffff; }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink-0);
+      font-family: 'Charter', 'Georgia', 'Cambria', 'Times New Roman', serif;
+      line-height: 1.55;
+      background: var(--bg);
+      min-height: 100vh;
+    }
+
+    a { color: var(--brand); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: var(--bg);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .top-nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 8px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      justify-content: center;
+      font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    }
+
+    .top-nav a {
+      color: var(--ink-1);
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 4px 2px;
+      border-bottom: 2px solid transparent;
+    }
+
+    .top-nav a:hover {
+      text-decoration: none;
+      border-bottom-color: var(--brand);
+    }
+
+    .hero {
+      padding: 38px 20px 22px;
+      border-bottom: 1px solid var(--line);
+      background: var(--bg);
+    }
+
+    .hero-inner { max-width: var(--max-w); margin: 0 auto; text-align: center; }
+    .hero h1 {
+      margin: 0;
+      color: var(--ink-0);
+      line-height: 1.2;
+      font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .hero-subtitle {
+      margin: 12px auto 0;
+      max-width: 880px;
+      color: var(--ink-2);
+      font-size: 0.96rem;
+    }
+
+    d-article {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+
+    .section {
+      background: var(--bg);
+      border: none;
+      border-top: 1px solid var(--line);
+      padding: 30px 0 24px;
+      margin-bottom: 0;
+    }
+    .section:first-of-type { border-top: none; padding-top: 18px; }
+
+    .section h2 {
+      margin: 0 0 8px;
+      color: var(--ink-0);
+      font-size: 1.45rem;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+    }
+
+    .section h3 {
+      color: var(--ink-0);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 18px 0 6px;
+    }
+
+    .section-subtitle {
+      margin: 0 0 18px;
+      color: var(--ink-2);
+      font-size: 0.95rem;
+      font-style: italic;
+    }
+
+    .section p { color: var(--ink-1); }
+
+    .arch-figure {
+      margin: 18px 0 0;
+      text-align: center;
+    }
+    .arch-figure img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      background: var(--bg);
+    }
+    .arch-figure figcaption {
+      margin-top: 8px;
+      color: var(--ink-2);
+      font-size: 0.88rem;
+      font-style: italic;
+    }
+
+    /* Notation legend (for FlexiSLM A->B) */
+    .notation {
+      margin: 0 0 18px;
+      padding: 10px 14px;
+      border-left: 3px solid var(--brand);
+      background: var(--paper);
+      color: var(--ink-1);
+      font-size: 0.92rem;
+    }
+    .notation code {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 0.85rem;
+    }
+
+    .filter-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+      font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    }
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    .filter-row label {
+      font-weight: 500;
+      color: var(--ink-1);
+      font-size: 0.85rem;
+    }
+    .filter-row select,
+    .filter-row input {
+      border: 1px solid var(--line-strong);
+      border-radius: 3px;
+      padding: 4px 8px;
+      font-size: 0.86rem;
+      background: var(--bg);
+      color: var(--ink-0);
+      min-width: 160px;
+      font-family: inherit;
+    }
+    .filter-row button {
+      background: var(--paper);
+      color: var(--ink-1);
+      border: 1px solid var(--line-strong);
+      border-radius: 3px;
+      padding: 4px 10px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .filter-row button:hover { background: var(--line); }
+    .filter-meta { color: var(--ink-2); font-size: 0.82rem; }
+
+    .sample-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sample-card {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      padding: 14px 16px 12px;
+    }
+
+    .sample-head {
+      margin-bottom: 6px;
+    }
+    .sample-head h3 {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--ink-0);
+      font-weight: 600;
+    }
+    .prompt {
+      margin: 0 0 10px;
+      color: var(--ink-1);
+      font-size: 0.92rem;
+    }
+
+    .audio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 8px;
+    }
+
+    .audio-slot {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.85rem;
+    }
+    .audio-slot.source   { border-left: 3px solid var(--brand); }
+    .audio-slot.flexi    { border-left: 3px solid var(--flexi-accent); }
+    .audio-slot.baseline { border-left: 3px solid var(--baseline-accent); }
+    .audio-slot.pending  { background: var(--paper); color: var(--ink-2); }
+
+    .slot-name {
+      font-weight: 600;
+      color: var(--ink-0);
+      font-size: 0.83rem;
+      font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    }
+    .slot-empty {
+      margin: 0;
+      color: var(--ink-2);
+      font-size: 0.78rem;
+      font-style: italic;
+    }
+    .slot-note {
+      margin: 0;
+      color: var(--ink-2);
+      font-size: 0.76rem;
+      max-height: 7.2em;
+      line-height: 1.45;
+      overflow-y: auto;
+      overflow-x: hidden;
+      white-space: pre-wrap;
+      word-break: break-word;
+      padding-right: 4px;
+    }
+    .slot-note::-webkit-scrollbar { width: 6px; }
+    .slot-note::-webkit-scrollbar-thumb {
+      background: var(--line-strong);
+      border-radius: 3px;
+    }
+    .slot-note::-webkit-scrollbar-track { background: transparent; }
+
+    .audio-defer audio {
+      width: 100%;
+      max-width: 220px;
+      height: 28px;
+    }
+    .play-btn {
+      align-self: flex-start;
+      background: var(--bg);
+      color: var(--brand);
+      border: 1px solid var(--brand);
+      border-radius: 3px;
+      padding: 2px 10px;
+      font-size: 0.78rem;
+      font-family: 'Helvetica Neue', 'Arial', sans-serif;
+      cursor: pointer;
+    }
+    .play-btn:hover {
+      background: var(--brand);
+      color: var(--bg);
+    }
+
+    .placeholder-card {
+      background: var(--paper);
+      border: 1px dashed var(--line-strong);
+      padding: 16px;
+      color: var(--ink-2);
+      font-size: 0.92rem;
+      font-style: italic;
+    }
+
+    .stat-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+      font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    }
+    .stat-chip {
+      font-size: 0.72rem;
+      color: var(--ink-2);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 1px 8px;
+    }
+
+    .turn-block {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      background: var(--bg);
+    }
+    .turn-label {
+      font-weight: 600;
+      font-size: 0.82rem;
+      margin-bottom: 4px;
+      font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    }
+    .turn-label.user      { color: var(--brand); }
+    .turn-label.assistant { color: var(--flexi-accent); }
+    .turn-text {
+      margin: 0 0 6px;
+      color: var(--ink-1);
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      max-height: 12em;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .turn-text::-webkit-scrollbar { width: 6px; }
+    .turn-text::-webkit-scrollbar-thumb {
+      background: var(--line-strong);
+      border-radius: 3px;
+    }
+    .turn-text::-webkit-scrollbar-track { background: transparent; }
+
+    .turn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    @media (max-width: 720px) {
+      .turn-row { grid-template-columns: 1fr; }
+    }
+
+    .error-box {
+      border: 1px solid var(--error-border);
+      background: var(--error-bg);
+      color: var(--error-fg);
+      padding: 10px 12px;
+      font-size: 0.88rem;
+    }
+
+    .contrib-list {
+      margin: 0;
+      padding-left: 22px;
+      color: var(--ink-1);
+    }
+    .contrib-list li { margin-bottom: 4px; }
+  </style>
+</head>
+
+<body>
+  <nav class='top-nav'>
+    <div class='top-nav-inner'>
+      <a href='#abstract'>Abstract &amp; Architecture</a>
+      <a href='#comparison'>Baseline Comparison</a>
+      <a href='#flexislm-data'>FlexiSLM-Data</a>
+    </div>
+  </nav>
+
+  <header class='hero'>
+    <div class='hero-inner'>
+      <h1>FlexiSLM: A Dynamic and Controllable Frame Rate Spoken Language Model</h1>
+      <p class='hero-subtitle'>
+        Paper submission to EMNLP
+      </p>
+    </div>
+  </header>
+
+  <d-article>
+
+    <!-- ===== Block 1: Intro + contributions + architecture image ===== -->
+    <section class='section' id='abstract'>
+      <h2>FlexiSLM &mdash; Overview</h2>
+      <p>
+        Existing spoken language models (SLMs) typically use a fixed speech-token frame
+        rate (for example, 25 Hz or 12.5 Hz). This fixed-rate design cannot adapt to
+        time-varying speech complexity and does not offer a direct speed-quality trade-off
+        at inference time. We introduce <strong>FlexiSLM</strong>, the first SLM that
+        supports <em>dynamic</em> and <em>controllable</em> frame rates on both speech
+        input and output. A single trained model can be steered from 12.5 Hz down to 4.0
+        Hz without retraining.
+      </p>
+
+      <h3 style='margin-top: 18px; margin-bottom: 6px; font-size:1.1rem;'>Key contributions</h3>
+      <ul class='contrib-list'>
+        <li>
+          <strong>Dynamic frame rate SLM framework and validation.</strong> We introduce
+          FlexiSLM, the first dynamic frame rate SLM framework, with dynamic frame
+          compression on both speech input and output. Experiments show strong performance
+          at 12.5 Hz and 6.25 Hz, with graceful degradation at 5.0 Hz and 4.0 Hz. We plan
+          to release the code and model to support future research.
+        </li>
+        <li>
+          <strong>Accurate and practical frame rate control.</strong> We propose direct
+          frame rate conditioning, letting users specify the average output frame rate
+          instead of indirectly tuning a merging threshold. This makes FlexiSLM, to our
+          knowledge, the first SLM with frame rate controllability.
+        </li>
+        <li>
+          <strong>Strong quality-efficiency trade-off.</strong> At 6.25 Hz output, FlexiSLM
+          roughly <em>halves</em> AR inference time relative to 12.5 Hz with only minor
+          quality degradation; at high-quality operating points, it outperforms fixed-rate
+          7B baselines such as Qwen2.5-Omni and Kimi-Audio.
+        </li>
+      </ul>
+
+      <figure class='arch-figure'>
+        <img src='assets/flexislm_architecture.png' alt='FlexiSLM architecture'>
+        <figcaption>
+          Overall FlexiSLM architecture: a Thinker-Talker model with dynamic frame-rate
+          compression on speech input and controllable frame-rate generation on speech
+          output.
+        </figcaption>
+      </figure>
+    </section>
+
+    <!-- ===== Block 2: Comparison with baseline systems ===== -->
+    <section class='section' id='comparison'>
+      <h2>Comparison with Baseline Systems</h2>
+      <p class='section-subtitle'>
+        Each card is one evaluation case. By default we show one sample per dataset; pick a
+        specific dataset in the filter to see all of its samples.
+      </p>
+
+      <div class='notation'>
+        <strong>Notation.</strong> <code>FlexiSLM A &rarr; B</code> means <strong>A&nbsp;Hz input</strong>
+        and <strong>B&nbsp;Hz output</strong> frame rates. For example, <code>FlexiSLM 6.25 &rarr; 12.5</code>
+        accepts speech encoded at 6.25&nbsp;Hz and emits speech tokens at 12.5&nbsp;Hz.
+      </div>
+
+      <div class='filter-wrap'>
+        <div class='filter-row'>
+          <label for='filter-dataset'>Dataset</label>
+          <select id='filter-dataset'>
+            <option value='all'>All datasets (1 sample each)</option>
+          </select>
+        </div>
+        <div class='filter-meta' id='filter-meta'>Loading manifest...</div>
+      </div>
+
+      <div class='sample-list' id='comparison-list'></div>
+      <div class='error-box' id='load-error' style='display:none; margin-top: 16px;'></div>
+    </section>
+
+    <!-- ===== Block 3: FlexiSLM-Data ===== -->
+    <section class='section' id='flexislm-data'>
+      <h2>FlexiSLM-Data Showcase</h2>
+      <p class='section-subtitle'>
+        FlexiSLM-Data is our large-scale speech-to-speech dialogue corpus used to train
+        FlexiSLM. This section presents curated user-assistant speech pairs to give an
+        intuitive view of the data style and interaction quality. Each card shows the
+        user's spoken prompt and the assistant's spoken response, together with transcript
+        text and rough duration / audio-token statistics from the manifest.
+      </p>
+      <div class='sample-list' id='flexislm-data-list'></div>
+      <div class='error-box' id='flexislm-data-error' style='display:none; margin-top: 16px;'></div>
+    </section>
+
+  </d-article>
+
+  <script>
+    // ==== Model registry =====================================================
+    const MODEL_META = {
+      flexi_12p5_12p5: { label: 'FlexiSLM 12.5 \u2192 12.5', kind: 'flexi' },
+      flexi_12p5_6p25: { label: 'FlexiSLM 12.5 \u2192 6.25', kind: 'flexi' },
+      flexi_6p25_12p5: { label: 'FlexiSLM 6.25 \u2192 12.5', kind: 'flexi' },
+      flexi_6p25_6p25: { label: 'FlexiSLM 6.25 \u2192 6.25', kind: 'flexi' },
+      flexi_5p0_5p0:   { label: 'FlexiSLM 5.0 \u2192 5.0',   kind: 'flexi' },
+      flexi_4p0_4p0:   { label: 'FlexiSLM 4.0 \u2192 4.0',   kind: 'flexi' },
+      qwen25_omni:     { label: 'Qwen2.5-Omni',              kind: 'baseline' },
+      qwen3_omni:      { label: 'Qwen3-Omni-30B',            kind: 'baseline' },
+      mimo_audio_7b:   { label: 'MiMo-Audio-7B',             kind: 'baseline' },
+      kimi_audio:      { label: 'Kimi-Audio-7B',             kind: 'baseline' }
+    };
+
+    // Display order: all FlexiSLM configurations first, then baselines.
+    const MODEL_ORDER = [
+      'flexi_12p5_12p5',
+      'flexi_12p5_6p25',
+      'flexi_6p25_12p5',
+      'flexi_6p25_6p25',
+      'flexi_5p0_5p0',
+      'flexi_4p0_4p0',
+      'qwen25_omni',
+      'qwen3_omni',
+      'mimo_audio_7b',
+      'kimi_audio'
+    ];
+
+    const FILTER_STATE = {
+      dataset: 'all'
+    };
+
+    // For the default ("All datasets") view: pick a sample per dataset and
+    // control the dataset ordering. advbench is intentionally placed last.
+    const DEFAULT_DATASET_ORDER = [
+      'OpenAudioBench',
+      'alpacaeval_full',
+      'commoneval',
+      'ifeval',
+      'sd-qa',
+      'advbench'
+    ];
+
+    // For the default view, pick a specific sample id per dataset (when present).
+    // Falls back to the first sample of that dataset if the id is not found.
+    const DEFAULT_SAMPLE_ID = {
+      // change this to a different advbench example than the first one
+      'advbench': 'advbench__advbench__3'
+    };
+
+    let ALL_SAMPLES = [];
+    let AUDIO_META_OBSERVER = null;
+
+    // ==== Utils ==============================================================
+    function esc(text) {
+      return String(text == null ? '' : text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function shortText(text, n) {
+      const clean = String(text == null ? '' : text).replace(/\s+/g, ' ').trim();
+      if (!n || clean.length <= n) return clean;
+      return clean.slice(0, n - 1) + '\u2026';
+    }
+
+    function uniqueSorted(values) {
+      return Array.from(new Set(values)).sort();
+    }
+
+    // ==== Filtering ==========================================================
+    // When dataset === 'all' we show one sample per dataset, ordered by
+    // DEFAULT_DATASET_ORDER (advbench last). DEFAULT_SAMPLE_ID lets us pick a
+    // specific sample id per dataset.  Otherwise we show every sample of the
+    // chosen dataset.
+    function filteredSamples(samples) {
+      const datasetSel = FILTER_STATE.dataset;
+
+      if (datasetSel !== 'all') {
+        return samples.filter(function(s) {
+          return s.dataset_dir === datasetSel;
+        });
+      }
+
+      // dataset === 'all' -> one sample per dataset_dir, in DEFAULT_DATASET_ORDER.
+      const byDataset = {};
+      samples.forEach(function(s) {
+        const d = s.dataset_dir;
+        if (!byDataset[d]) byDataset[d] = [];
+        byDataset[d].push(s);
+      });
+
+      const out = [];
+      const knownOrder = DEFAULT_DATASET_ORDER.slice();
+      const datasets = Object.keys(byDataset);
+      // Append datasets not in DEFAULT_DATASET_ORDER (alphabetical), keeping
+      // anything explicitly listed first.
+      datasets.forEach(function(d) {
+        if (knownOrder.indexOf(d) < 0) knownOrder.push(d);
+      });
+
+      knownOrder.forEach(function(d) {
+        const list = byDataset[d];
+        if (!list || !list.length) return;
+        const wantedId = DEFAULT_SAMPLE_ID[d];
+        let pick = null;
+        if (wantedId) {
+          pick = list.find(function(s) { return s.id === wantedId; }) || null;
+        }
+        if (!pick) pick = list[0];
+        out.push(pick);
+      });
+      return out;
+    }
+
+    // Friendly display names for dataset ids used in filters and metadata.
+    function datasetDisplayName(ds) {
+      const m = {
+        advbench: 'AdvBench',
+        alpacaeval_full: 'AlpacaEval',
+        commoneval: 'CommonEval',
+        ifeval: 'IFEval',
+        'sd-qa': 'SD-QA',
+        OpenAudioBench: 'OpenAudioBench'
+      };
+      return m[ds] || ds;
+    }
+
+    // Friendly display names for "dataset / subset" pairs.
+    function datasetLabel(sample) {
+      const ds = sample.dataset_dir || '';
+      const sub = sample.subset || '';
+      // OpenAudioBench has multiple subsets, so we name by subset.
+      if (ds === 'OpenAudioBench') {
+        const sm = {
+          llama_questions: 'LLaMa Questions',
+          web_questions:   'Web Questions',
+          trivia_qa:       'TriviaQA',
+          alpaca_eval:     'AlpacaEval'
+        };
+        return sm[sub] || sub || ds;
+      }
+      return datasetDisplayName(ds);
+    }
+
+    // ==== Rendering ==========================================================
+    function audioSlotHtml(label, audioPath, predictionText, kind) {
+      const slotClass = kind ? 'audio-slot ' + kind : 'audio-slot';
+      const cleanText = predictionText
+        ? String(predictionText).replace(/\s+/g, ' ').trim()
+        : '';
+      const note = cleanText
+        ? '<p class="slot-note">' + esc(cleanText) + '</p>'
+        : '';
+      if (audioPath) {
+        return [
+          '<div class="' + slotClass + '">',
+            '<div class="slot-name">' + esc(label) + '</div>',
+            '<div class="audio-defer">',
+              '<button class="play-btn" type="button" data-src="' + esc(audioPath) + '">\u25B6 Play audio</button>',
+              '<audio controls preload="metadata" data-src="' + esc(audioPath) + '" hidden></audio>',
+            '</div>',
+            note,
+          '</div>'
+        ].join('');
+      }
+      return [
+        '<div class="' + slotClass + ' pending">',
+          '<div class="slot-name">' + esc(label) + '</div>',
+          '<p class="slot-empty">No audio file in manifest.</p>',
+          note,
+        '</div>'
+      ].join('');
+    }
+
+    function sampleCardHtml(sample) {
+      const prompt = sample.prompt_text || '(no prompt text in manifest)';
+      const parts = [];
+      parts.push('<article class="sample-card">');
+      parts.push(  '<div class="sample-head">');
+      parts.push(    '<h3>' + esc(datasetLabel(sample)) + '</h3>');
+      parts.push(  '</div>');
+      parts.push(  '<p class="prompt"><strong>Prompt:</strong> ' + esc(shortText(prompt, 320)) + '</p>');
+      parts.push(  '<div class="audio-grid">');
+      parts.push(    audioSlotHtml('Source Prompt', sample.source_audio, null, 'source'));
+      MODEL_ORDER.forEach(function(key) {
+        const meta = MODEL_META[key];
+        if (!meta) return;
+        const info = sample.models ? sample.models[key] : null;
+        const audio = info && info.audio ? info.audio : null;
+        const text  = info && info.prediction_text ? info.prediction_text : null;
+        parts.push(audioSlotHtml(meta.label, audio, text, meta.kind));
+      });
+      parts.push(  '</div>');
+      parts.push('</article>');
+      return parts.join('');
+    }
+
+    function primeAudioMetadata(audio) {
+      if (!audio) return;
+      if (audio.dataset.metaPrimed === '1') return;
+      const src = audio.getAttribute('src') || audio.getAttribute('data-src');
+      if (!src) return;
+      if (!audio.getAttribute('src')) {
+        audio.setAttribute('src', src);
+      }
+      audio.preload = 'metadata';
+      audio.dataset.metaPrimed = '1';
+      audio.load();
+    }
+
+    function observeAudioMetadata() {
+      const audios = document.querySelectorAll('.audio-defer audio[data-src]');
+      if (!audios.length) return;
+      if (!('IntersectionObserver' in window)) {
+        audios.forEach(function(audio, idx) {
+          if (idx < 6) primeAudioMetadata(audio);
+        });
+        return;
+      }
+      if (!AUDIO_META_OBSERVER) {
+        AUDIO_META_OBSERVER = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (!entry.isIntersecting) return;
+            primeAudioMetadata(entry.target);
+            AUDIO_META_OBSERVER.unobserve(entry.target);
+          });
+        }, {
+          root: null,
+          rootMargin: '240px 0px',
+          threshold: 0.01
+        });
+      }
+      audios.forEach(function(audio) {
+        if (audio.dataset.observed === '1') return;
+        audio.dataset.observed = '1';
+        AUDIO_META_OBSERVER.observe(audio);
+      });
+    }
+
+    function prefetchLikelyAudios(maxCount) {
+      const run = function() {
+        let warmed = 0;
+        document.querySelectorAll('.audio-defer audio[data-src]').forEach(function(audio) {
+          if (warmed >= maxCount) return;
+          if (audio.dataset.prefetched === '1') return;
+          primeAudioMetadata(audio);
+          audio.dataset.prefetched = '1';
+          warmed += 1;
+        });
+      };
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(run, { timeout: 1200 });
+      } else {
+        window.setTimeout(run, 250);
+      }
+    }
+
+    function attachAudioLoadHandlers() {
+      document.querySelectorAll('.play-btn').forEach(function(btn) {
+        if (btn.dataset.bound === '1') return;
+        btn.dataset.bound = '1';
+        btn.addEventListener('click', function() {
+          const wrap = btn.closest('.audio-defer');
+          if (!wrap) return;
+          const audio = wrap.querySelector('audio[data-src]');
+          if (!audio) return;
+          primeAudioMetadata(audio);
+          audio.hidden = false;
+          btn.remove();
+          const p = audio.play();
+          if (p && typeof p.catch === 'function') { p.catch(function() {}); }
+        });
+      });
+    }
+
+    function updateFilterMeta(shown, total) {
+      const el = document.getElementById('filter-meta');
+      if (!el) return;
+      if (FILTER_STATE.dataset === 'all') {
+        el.textContent = 'Showing 1 sample per dataset (' + shown + ' shown of ' + total + ' total).';
+      } else {
+        el.textContent = 'Dataset = ' + datasetDisplayName(FILTER_STATE.dataset) + ' \u2192 ' + shown + ' samples shown.';
+      }
+    }
+
+    function render() {
+      const visible = filteredSamples(ALL_SAMPLES);
+      const list = document.getElementById('comparison-list');
+      if (!visible.length) {
+        list.innerHTML = '<div class="placeholder-card"><strong>No samples match the current filter.</strong></div>';
+      } else {
+        list.innerHTML = visible.map(sampleCardHtml).join('');
+        attachAudioLoadHandlers();
+        observeAudioMetadata();
+        prefetchLikelyAudios(2);
+      }
+      updateFilterMeta(visible.length, ALL_SAMPLES.length);
+    }
+
+    function fillDatasetSelect() {
+      const sel = document.getElementById('filter-dataset');
+      if (!sel) return;
+      const datasets = uniqueSorted(ALL_SAMPLES.map(function(s) { return s.dataset_dir; }));
+      const opts = ['<option value="all">All datasets (1 sample each)</option>'];
+      datasets.forEach(function(d) {
+        opts.push('<option value="' + esc(d) + '">' + esc(datasetDisplayName(d)) + '</option>');
+      });
+      sel.innerHTML = opts.join('');
+      sel.value = FILTER_STATE.dataset;
+    }
+
+    function attachFilterHandlers() {
+      const sel = document.getElementById('filter-dataset');
+      if (!sel) return;
+      sel.addEventListener('change', function() {
+        FILTER_STATE.dataset = sel.value || 'all';
+        render();
+      });
+    }
+
+    function showLoadError(message) {
+      const box = document.getElementById('load-error');
+      if (!box) return;
+      box.style.display = 'block';
+      box.textContent = message;
+    }
+
+    async function boot() {
+      try {
+        const r = await fetch('./demo_assets/manifest.json', { cache: 'no-store' });
+        if (!r.ok) throw new Error('HTTP ' + r.status + ' loading manifest');
+        const manifest = await r.json();
+        ALL_SAMPLES = Array.isArray(manifest.samples) ? manifest.samples : [];
+        if (!ALL_SAMPLES.length) showLoadError('Manifest loaded but contains no samples.');
+        fillDatasetSelect();
+        attachFilterHandlers();
+        render();
+      } catch (err) {
+        showLoadError('Failed to load demo_assets/manifest.json: ' + err.message);
+      }
+    }
+
+    // ==== FlexiSLM-Data block ===============================================
+    function fdShowError(msg) {
+      const box = document.getElementById('flexislm-data-error');
+      if (!box) return;
+      box.style.display = 'block';
+      box.textContent = msg;
+    }
+
+    function fdMessageText(messages, role) {
+      if (!Array.isArray(messages)) return '';
+      const m = messages.find(function(x) { return x && x.role === role; });
+      if (!m) return '';
+      return String(m.content || '').replace(/<\|audio\|>/g, '').trim();
+    }
+
+    function fdTurnHtml(label, kind, transcript, audioPath) {
+      const safeText = transcript
+        ? '<p class="turn-text">' + esc(transcript) + '</p>'
+        : '<p class="turn-text" style="font-style:italic;color:var(--ink-2);">(no transcript)</p>';
+      const audioBlock = audioPath ? [
+        '<div class="audio-defer">',
+          '<button class="play-btn" type="button" data-src="' + esc(audioPath) + '">\u25B6 Play audio</button>',
+          '<audio controls preload="metadata" data-src="' + esc(audioPath) + '" hidden></audio>',
+        '</div>'
+      ].join('') : '<p class="slot-empty">Audio file missing in manifest.</p>';
+      return [
+        '<div class="turn-block">',
+          '<div class="turn-label ' + kind + '">' + esc(label) + '</div>',
+          safeText,
+          audioBlock,
+        '</div>'
+      ].join('');
+    }
+
+    function fdSampleCardHtml(sample, idx) {
+      const userText = fdMessageText(sample.messages, 'user');
+      const asstText = fdMessageText(sample.messages, 'assistant');
+      const audios = Array.isArray(sample.audios) ? sample.audios : [];
+      const userAudio = audios[0] || null;
+      const asstAudio = audios[1] || null;
+
+      const parts = [];
+      parts.push('<article class="sample-card">');
+      parts.push(  '<div class="sample-head">');
+      parts.push(    '<h3>Sample ' + (idx + 1) + '</h3>');
+      parts.push(  '</div>');
+      parts.push(  '<div class="turn-row">');
+      parts.push(    fdTurnHtml('User', 'user', userText, userAudio));
+      parts.push(    fdTurnHtml('Assistant', 'assistant', asstText, asstAudio));
+      parts.push(  '</div>');
+      parts.push('</article>');
+      return parts.join('');
+    }
+
+    async function bootFlexiData() {
+      const list = document.getElementById('flexislm-data-list');
+      if (!list) return;
+      try {
+        const r = await fetch('./demo_assets_flexislm_data/manifest.json', { cache: 'no-store' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const manifest = await r.json();
+        const samples = Array.isArray(manifest.samples) ? manifest.samples : [];
+        if (!samples.length) {
+          list.innerHTML = '<div class="placeholder-card"><strong>No FlexiSLM-Data samples found.</strong></div>';
+          return;
+        }
+        list.innerHTML = samples.map(function(s, i) { return fdSampleCardHtml(s, i); }).join('');
+        attachAudioLoadHandlers();
+        observeAudioMetadata();
+        prefetchLikelyAudios(2);
+      } catch (err) {
+        fdShowError('Failed to load demo_assets_flexislm_data/manifest.json: ' + err.message);
+      }
+    }
+
+    boot();
+    bootFlexiData();
+  </script>
+</body>
+</html>

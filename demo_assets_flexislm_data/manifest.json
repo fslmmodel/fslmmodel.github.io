@@ -1,0 +1,276 @@
+{
+  "dataset": "FlexiSLM-Data",
+  "num_samples": 10,
+  "samples": [
+    {
+      "id": "flexislm_data__000",
+      "index": 0,
+      "messages": [
+        {
+          "content": "<|audio|>",
+          "role": "user"
+        },
+        {
+          "content": "That was Johnny Cash. His career saw a major revival with that album.\n<|audio|>",
+          "role": "assistant"
+        }
+      ],
+      "audio_durations": [
+        11.238,
+        4.88
+      ],
+      "audio_tokens": [
+        191,
+        82
+      ],
+      "num_tokens_est": 295,
+      "audios": [
+        "demo_assets_flexislm_data/audio/flexislm_data__000/user.wav",
+        "demo_assets_flexislm_data/audio/flexislm_data__000/assistant.wav"
+      ]
+    },
+    {
+      "id": "flexislm_data__001",
+      "index": 1,
+      "messages": [
+        {
+          "content": "<|audio|>",
+          "role": "user"
+        },
+        {
+          "content": "The correct answer is C: speed of sound. The speed of sound in a fluid determines how quickly pressure changes propagate through it.\n<|audio|>",
+          "role": "assistant"
+        }
+      ],
+      "audio_durations": [
+        11.099,
+        9.36
+      ],
+      "audio_tokens": [
+        188,
+        159
+      ],
+      "num_tokens_est": 384,
+      "audios": [
+        "demo_assets_flexislm_data/audio/flexislm_data__001/user.wav",
+        "demo_assets_flexislm_data/audio/flexislm_data__001/assistant.wav"
+      ]
+    },
+    {
+      "id": "flexislm_data__002",
+      "index": 2,
+      "messages": [
+        {
+          "content": "<|audio|>",
+          "role": "user"
+        },
+        {
+          "content": "Dear Hamish,\n\nYour journey across the sea has always reminded me how powerful a single oar can be when matched with relentless determination. Each stroke of your oar carved paths through vast oceans, proving that courage sails beyond horizons. I imagine you gripping that oar tightly during storms, eyes fixed on distant shores, knowing the sea rewards those who persist. Your legacy teaches us that even in silence, the rhythm of an oar can echo louder than any shout.\n\nThe sea holds countless stories, but yours stands out because you never let the waves steal your purpose. With every oar pull, you turned challenges into momentum, turning tides into allies. May your spirit inspire others to grab their own oar and sail boldly into uncharted waters. Let the sea remind you that adventure lives where effort meets hope—and that's where true heroes are made.\n<|audio|>",
+          "role": "assistant"
+        }
+      ],
+      "audio_durations": [
+        13.56,
+        74.48
+      ],
+      "audio_tokens": [
+        230,
+        1266
+      ],
+      "num_tokens_est": 1715,
+      "audios": [
+        "demo_assets_flexislm_data/audio/flexislm_data__002/user.wav",
+        "demo_assets_flexislm_data/audio/flexislm_data__002/assistant.wav"
+      ]
+    },
+    {
+      "id": "flexislm_data__003",
+      "index": 3,
+      "messages": [
+        {
+          "content": "<|audio|>",
+          "role": "user"
+        },
+        {
+          "content": "The Appalachian Trail.\n<|audio|>",
+          "role": "assistant"
+        }
+      ],
+      "audio_durations": [
+        5.433,
+        1.52
+      ],
+      "audio_tokens": [
+        92,
+        25
+      ],
+      "num_tokens_est": 127,
+      "audios": [
+        "demo_assets_flexislm_data/audio/flexislm_data__003/user.wav",
+        "demo_assets_flexislm_data/audio/flexislm_data__003/assistant.wav"
+      ]
+    },
+    {
+      "id": "flexislm_data__004",
+      "index": 4,
+      "messages": [
+        {
+          "content": "<|audio|>",
+          "role": "user"
+        },
+        {
+          "content": "I can't access your Instagram account or view your posts and comments. You'll need to check those directly in the app.\n<|audio|>",
+          "role": "assistant"
+        }
+      ],
+      "audio_durations": [
+        3.622,
+        9.12
+      ],
+      "audio_tokens": [
+        61,
+        155
+      ],
+      "num_tokens_est": 250,
+      "audios": [
+        "demo_assets_flexislm_data/audio/flexislm_data__004/user.wav",
+        "demo_assets_flexislm_data/audio/flexislm_data__004/assistant.wav"
+      ]
+    },
+    {
+      "id": "flexislm_data__005",
+      "index": 5,
+      "messages": [
+        {
+          "content": "<|audio|>",
+          "role": "user"
+        },
+        {
+          "content": "Saqqara is located in Egypt.\n<|audio|>",
+          "role": "assistant"
+        }
+      ],
+      "audio_durations": [
+        2.926,
+        2.24
+      ],
+      "audio_tokens": [
+        49,
+        38
+      ],
+      "num_tokens_est": 98,
+      "audios": [
+        "demo_assets_flexislm_data/audio/flexislm_data__005/user.wav",
+        "demo_assets_flexislm_data/audio/flexislm_data__005/assistant.wav"
+      ]
+    },
+    {
+      "id": "flexislm_data__006",
+      "index": 6,
+      "messages": [
+        {
+          "content": "<|audio|>",
+          "role": "user"
+        },
+        {
+          "content": "Amy Winehouse passed away from alcohol poisoning in 2011 at the age of 27.\n<|audio|>",
+          "role": "assistant"
+        }
+      ],
+      "audio_durations": [
+        3.111,
+        6.32
+      ],
+      "audio_tokens": [
+        52,
+        107
+      ],
+      "num_tokens_est": 182,
+      "audios": [
+        "demo_assets_flexislm_data/audio/flexislm_data__006/user.wav",
+        "demo_assets_flexislm_data/audio/flexislm_data__006/assistant.wav"
+      ]
+    },
+    {
+      "id": "flexislm_data__007",
+      "index": 7,
+      "messages": [
+        {
+          "content": "<|audio|>",
+          "role": "user"
+        },
+        {
+          "content": "He was known as the Boston Strangler.\n<|audio|>",
+          "role": "assistant"
+        }
+      ],
+      "audio_durations": [
+        4.458,
+        2.0
+      ],
+      "audio_tokens": [
+        75,
+        34
+      ],
+      "num_tokens_est": 123,
+      "audios": [
+        "demo_assets_flexislm_data/audio/flexislm_data__007/user.wav",
+        "demo_assets_flexislm_data/audio/flexislm_data__007/assistant.wav"
+      ]
+    },
+    {
+      "id": "flexislm_data__008",
+      "index": 8,
+      "messages": [
+        {
+          "content": "<|audio|>",
+          "role": "user"
+        },
+        {
+          "content": "Jupiter is the largest planet in our solar system.\n<|audio|>",
+          "role": "assistant"
+        }
+      ],
+      "audio_durations": [
+        2.415,
+        3.76
+      ],
+      "audio_tokens": [
+        41,
+        63
+      ],
+      "num_tokens_est": 121,
+      "audios": [
+        "demo_assets_flexislm_data/audio/flexislm_data__008/user.wav",
+        "demo_assets_flexislm_data/audio/flexislm_data__008/assistant.wav"
+      ]
+    },
+    {
+      "id": "flexislm_data__009",
+      "index": 9,
+      "messages": [
+        {
+          "content": "<|audio|>",
+          "role": "user"
+        },
+        {
+          "content": "The proposal presented during the meeting appears to be a sound initiative with considerable potential benefits warranting further examination.\n<|audio|>",
+          "role": "assistant"
+        }
+      ],
+      "audio_durations": [
+        11.146,
+        7.28
+      ],
+      "audio_tokens": [
+        189,
+        123
+      ],
+      "num_tokens_est": 352,
+      "audios": [
+        "demo_assets_flexislm_data/audio/flexislm_data__009/user.wav",
+        "demo_assets_flexislm_data/audio/flexislm_data__009/assistant.wav"
+      ]
+    }
+  ]
+}
